@@ -1,6 +1,6 @@
 import React, { useReducer, useEffect } from 'react';
 
-import { validate } from '../util/validators';
+import { validate } from '../../util/validators';
 import './Input.scss';
 
 const inputReducer = (state, action) => {
@@ -24,9 +24,9 @@ const inputReducer = (state, action) => {
 
 const Input = props => {
   const [inputState, dispatch] = useReducer(inputReducer, {
-    value: '',
+    value: props.initialValue || '',
     isTouched: false,
-    isValid: false
+    isValid: props.initialValid || false
   });
 
   const { id, onInput } = props;

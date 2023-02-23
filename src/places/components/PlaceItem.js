@@ -1,14 +1,14 @@
-import {React, useState} from "react";
+import { React, useState } from "react";
 
 import Card from "../../shared/UIElements/Card";
 import Modal from "../../shared/UIElements/Modal";
-import Button from "../../shared/FormElements/Button";
+import Button from "../../shared/components/FormElements/Button";
 import Map from "../../shared/UIElements/Map";
 
 
 import "./PlaceItem.scss"
 
-export default function PlaceItem(props){
+export default function PlaceItem(props) {
     const [showMap, setShowMap] = useState(false)
 
     const openMapHandler = () => setShowMap(true)
@@ -17,23 +17,23 @@ export default function PlaceItem(props){
 
     return (
         <>
-            <Modal 
+            <Modal
                 show={showMap}
                 onCancel={closeMapHandler}
                 header={props.address}
                 contentClass="place-item__modal-content"
                 footerClass="place-item__modal-actions"
                 footer={<Button onClick={closeMapHandler}>CLOSE</Button>}
-                >
+            >
                 <div className="map-container">
                     <Map center={props.coordinates} zoom={16} />
 
                 </div>
 
             </Modal>
-            
+
             <li className="place-item">
-                <Card className="place-item__content"> 
+                <Card className="place-item__content">
                     <div className="place-item__image">
                         <img src={props.image} alt={props.title} />
                     </div>
