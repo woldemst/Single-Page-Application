@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import './Button.scss';
+import './Button.css';
 
 const Button = props => {
   if (props.href) {

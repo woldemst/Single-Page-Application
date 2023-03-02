@@ -1,35 +1,37 @@
 import React from 'react';
 
-import Input from "../../shared/components/FormElements/Input";
-import Button from '../../shared/components/FormElements/Button'
-import { VALIDATOR_MINLENGTH, VALIDATOR_REQUIRE } from "../../shared/util/validators";
+import Input from '../../shared/components/FormElements/Input';
+import Button from '../../shared/components/FormElements/Button';
+import {
+  VALIDATOR_REQUIRE,
+  VALIDATOR_MINLENGTH
+} from '../../shared/util/validators';
 import { useForm } from '../../shared/hooks/form-hook';
+import './PlaceForm.css';
 
-import './PlaceForm.scss'
-
-
-export default function NewPlace() {
-  const [formState, inputHandler] = useForm({
-    title: {
-      value: '',
-      isValid: false
+const NewPlace = () => {
+  const [formState, inputHandler] = useForm(
+    {
+      title: {
+        value: '',
+        isValid: false
+      },
+      description: {
+        value: '',
+        isValid: false
+      },
+      address: {
+        value: '',
+        isValid: false
+      }
     },
-    description: {
-      value: '',
-      isValid: false
-    },
-    address: {
-      value: '',
-      isValid: false
-    }, 
-  }, false)
-
-
+    false
+  );
 
   const placeSubmitHandler = event => {
-    event.preventDefault()
-    console.log(formState.inputs);
-  }
+    event.preventDefault();
+    console.log(formState.inputs); // send this to the backend!
+  };
 
   return (
     <form className="place-form" onSubmit={placeSubmitHandler}>
@@ -65,3 +67,4 @@ export default function NewPlace() {
   );
 };
 
+export default NewPlace;
