@@ -1,8 +1,8 @@
-const uuidv4 = require('uuidv4')
+const { v4: uuidv4 } = require("uuid");
 
 const HttpError = require("../models/http-error");
 
-const DUMMMY_PLACES = [
+let DUMMMY_PLACES = [
   {
     id: "p1",
     title: "Empire State Building",
@@ -14,7 +14,7 @@ const DUMMMY_PLACES = [
       lat: 40.7484405,
       lng: -73.9878584,
     },
-    creator: "u1", 
+    creator: "u1",
   },
 ];
 
@@ -31,42 +31,70 @@ const getPlaceById = (req, res, next) => {
   res.json({ place }); // => { place } => { place: place }
 };
 
-const getPlaceByUserId = (req, res, next) => {
+const getPlacesByUserId = (req, res, next) => {
   const userId = req.params.uid;
 
-  const place = DUMMMY_PLACES.find((p) => {
+  const places = DUMMMY_PLACES.filter((p) => {
     return p.creator === userId;
   });
 
-  if (!place) {
+
+  if (!places || places.length === 0) {
     return new HttpError(
       "Could not find a place for the provided user id.",
       404
     );
   }
 
-  res.json({ place });
+  res.json({ places });
 };
 
 const createPlace = (req, res, next) => {
-    const {title, description, coordinates, address, creator} = req.body; 
+  const { title, description, coordinates, address, creator } = req.body;
 
-    const createdPlace = {
-        id: uuidv4(),
-        title, 
-        description, 
-        location: coordinates, 
-        address, 
-        creator
-    }
+  const createdPlace = {
+    id: uuidv4(),
+    title,
+    description,
+    location: coordinates,
+    address,
+    creator,
+  };
 
-    DUMMMY_PLACES.push(createdPlace) // or unshift(createdPlace)
+  DUMMMY_PLACES.push(createdPlace); // or unshift(createdPlace)
 
-    res.status(201).json({place: createdPlace})
-     // status 201  if  you successfuly sent somwething 
+  res.status(201).json({ place: createdPlace });
+  // status 201  if  you successfuly sent somwething
+};
+
+const updatePlace = (req, res, next) => {
+  const {title, description} = req.body;
+  const placeId = req.params.pid; // params is already exsists in express 
+  // we can achive thes dynamic url part after the column :pid  and get concret value
+
+  const updatedPlace = {...DUMMMY_PLACES.find(p => p.id === placeId)}
+  const placeIndex = DUMMMY_PLACES.findIndex(p => p.id === placeId)
+  updatedPlace.title = title;
+  updatedPlace.description = description;
+
+  DUMMMY_PLACES[placeIndex] = updatedPlace;
+
+  res.status(200).json({place:updatePlace})
 
 }
 
+
+const deletePlace = (req, res, next) => {
+  const placeId = req.params.pid;
+
+  DUMMMY_PLACES = DUMMMY_PLACES.find(p => p.id === placeId)
+
+  res.status(200).json({message: 'Deleted place.'})
+}
+
+
 exports.getPlaceById = getPlaceById;
-exports.getPlaceByUserId = getPlaceByUserId;
+exports.getPlacesByUserId = getPlacesByUserId;
 exports.createPlace = createPlace;
+exports.updatePlace = updatePlace;
+exports.deletePlace = deletePlace; 
