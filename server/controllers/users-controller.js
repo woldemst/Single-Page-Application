@@ -1,4 +1,6 @@
-const {v4: uuidv4} = require("uuid")
+const { v4: uuidv4 } = require("uuid");
+
+const { validationResult } = require("express-validator");
 
 const HttpError = require("../models/http-error");
 
@@ -7,13 +9,13 @@ let DUMMY_USERS = [
     id: "u1",
     name: "Max Schwarz",
     email: "test@test.com",
-    password: "testers"
+    password: "testers",
   },
   {
     id: "u2",
     name: "Max Weinert",
     email: "test2@test.com",
-    password: "testers"
+    password: "testers",
   },
 ];
 
@@ -24,36 +26,48 @@ const getUsers = (req, res, next) => {
 };
 
 const signup = (req, res, next) => {
-    const {name, email, password} = req.body;
+  const errors = validationResult(req)
 
-    const hasUser = DUMMY_USERS.find(u => u.email === email);
-    
-    if(hasUser){
-        throw new HttpError('Could not create new user, email already exists.', 422)
-    }
+  if(!errors.isEmpty()){
+    console.log(errors);
+    throw new HttpError('Invalid inputs passed, please check your data', 422)
+  }
 
-    const createdUser = { 
-        id: uuidv4(),
-        name, 
-        email, 
-        password
-    };
+  const { name, email, password } = req.body;
 
-    DUMMY_USERS.push(createdUser)
-    res.status(201).json({users:createdUser})
-}
+  const hasUser = DUMMY_USERS.find((u) => u.email === email);
+
+  if (hasUser) {
+    throw new HttpError(
+      "Could not create new user, email already exists.",
+      422
+    );
+  }
+
+  const createdUser = {
+    id: uuidv4(),
+    name,
+    email,
+    password,
+  };
+
+  DUMMY_USERS.push(createdUser);
+  res.status(201).json({ users: createdUser });
+};
 
 const login = (req, res, next) => {
-    const {email, password} = req.body;
+  const { email, password } = req.body;
 
+  const identifiedUser = DUMMY_USERS.find((u) => u.email === email);
 
-    const identifiedUser = DUMMY_USERS.find(u => u.email === email)
-
-    if (!identifiedUser || identifiedUser.password !== password){
-        throw new HttpError('Could not identify user, credentials seem to be wrong.', 401)   
-    }
-    res.json({message: "Logged in!"})
-}
+  if (!identifiedUser || identifiedUser.password !== password) {
+    throw new HttpError(
+      "Could not identify user, credentials seem to be wrong.",
+      401
+    );
+  }
+  res.json({ message: "Logged in!" });
+};
 
 exports.getUsers = getUsers;
 exports.signup = signup;
