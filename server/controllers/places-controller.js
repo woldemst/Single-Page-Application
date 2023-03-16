@@ -3,6 +3,7 @@ const { validationResult } = require("express-validator");
 
 const HttpError = require("../models/http-error");
 const getCoordsForAddress = require("../util/location");
+const Place = require("../models/place");
 
 let DUMMMY_PLACES = [
   {
@@ -70,16 +71,45 @@ const createPlace = async (req, res, next) => {
     return next(error);
   }
 
-  const createdPlace = {
-    id: uuidv4(),
+  //localhost developing | START ! 
+  // const createdPlace = {
+  //   id: uuidv4(),
+  //   title,
+  //   description,
+  //   location: coordinates,
+  //   address,
+  //   creator,
+  // };
+  //localhost developing | END !
+
+  //with mongodb | START ! 
+    const createdPlace = {
     title,
     description,
-    location: coordinates,
     address,
-    creator,
-  };
+    location: coordinates,
+    image: "https://images.pexels.com/photos/839011/pexels-photo-839011.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+    creator
+  }; 
+  //with mongodb | END !
 
-  DUMMMY_PLACES.push(createdPlace); // or unshift(createdPlace)
+  //localhost developing | START ! 
+  // DUMMMY_PLACES.push(createdPlace); // or unshift(createdPlace)
+  //localhost developing | END !
+
+  //with mongodb | START !
+  try{
+    await createdPlace.save()
+  }catch (err) {
+    const error = new HttpError(
+      'Creating place failed, please try again.',
+      500
+    )
+    return next(error)
+  }
+
+  //with mongodb | END !
+
 
   res.status(201).json({ place: createdPlace });
   // status 201  if  you successfuly sent somwething
