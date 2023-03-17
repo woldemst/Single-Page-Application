@@ -1,17 +1,15 @@
-const { v4: uuidv4 } = require("uuid");
+// const { v4: uuidv4 } = require("uuid");
 const { validationResult } = require("express-validator");
 
-const HttpError = require("../models/http-error");
-const getCoordsForAddress = require("../util/location");
-const Place = require("../models/place");
+const HttpError = require('../models/http-error');
+const getCoordsForAddress = require('../util/location');
+const Place = require('../models/place');
 
 let DUMMMY_PLACES = [
   {
     id: "p1",
     title: "Empire State Building",
     description: "One of the most famous sky scrapers in the world!",
-    imageUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/NYC_Empire_State_Building.jpg/640px-NYC_Empire_State_Building.jpg",
     address: "20 W 34th St, New York, NY 10001",
     location: {
       lat: 40.7484405,
@@ -83,14 +81,14 @@ const createPlace = async (req, res, next) => {
   //localhost developing | END !
 
   //with mongodb | START ! 
-    const createdPlace = {
+    const createdPlace = new Place({
     title,
     description,
     address,
     location: coordinates,
     image: "https://images.pexels.com/photos/839011/pexels-photo-839011.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
     creator
-  }; 
+  }); 
   //with mongodb | END !
 
   //localhost developing | START ! 
@@ -99,7 +97,7 @@ const createPlace = async (req, res, next) => {
 
   //with mongodb | START !
   try{
-    await createdPlace.save()
+    await createdPlace.save() //method from mongoose
   }catch (err) {
     const error = new HttpError(
       'Creating place failed, please try again.',
