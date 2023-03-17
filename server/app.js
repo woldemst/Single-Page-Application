@@ -5,7 +5,7 @@ const app = express();
 
 const placeRoutes = require("./routes/places-routes");
 const usersRoutes = require("./routes/users-routes");
-const HttpError = require("./models/http-error");
+const HttpError = require("./models/http-error").default;
 // const usersRouters = require("./routes/users-routes");
 
 app.use(bodyParser.json());
@@ -31,12 +31,15 @@ app.use((error, req, res, next) => {
 mongoose
   .connect(
     "mongodb+srv://woldemst:woldemst@firstcluster.dasacxo.mongodb.net/places?retryWrites=true&w=majority"
+    , {
+      useNewUrlParser: true,
+      useUnifiedTopology: true
+    }
   )
   .then(() => {
     app.listen(5000);
+    console.log('connected');
   })
-  .catch(err =>{
+  .catch(err => {
     console.log(err);
   });
-
-// app.listen(5000);
