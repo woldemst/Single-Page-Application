@@ -138,7 +138,10 @@ const createPlace = async (req, res, next) => {
 const updatePlace = async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    throw new HttpError("Invalid inputs passed, please check your data.", 422);
+    return next(
+      new HttpError("Invalid inputs passed, please check your data.", 422)
+
+    ) 
   }
 
   const { title, description } = req.body;
@@ -156,7 +159,7 @@ const updatePlace = async (req, res, next) => {
     return next(error);
   }
 
-  // used for developing
+  // used DUMMY DEV
   // const updatedPlace = { ...DUMMY_PLACES.find((p) => p.id === placeId) };
   // const placeIndex = DUMMY_PLACES.findIndex((p) => p.id === placeId);
   // updatedPlace.title = title;
@@ -166,7 +169,7 @@ const updatePlace = async (req, res, next) => {
   place.title = title;
   place.description = description;
 
-  // used for developing
+  // used DUMMY DEV
   // DUMMY_PLACES[placeIndex] = updatedPlace;
 
   //used for mongodb
@@ -180,7 +183,7 @@ const updatePlace = async (req, res, next) => {
     return next(error);
   }
 
-  // for developing
+  // DUMMY DEV
   // res.status(200).json({ place: updatedPlace });
 
   // mongo. convert mongoose obj to normal JS obj.
@@ -189,7 +192,7 @@ const updatePlace = async (req, res, next) => {
 
 const deletePlace = async (req, res, next) => {
   const placeId = req.params.pid;
-  // for developing
+  // DUMMY DEV
   // if (!DUMMY_PLACES.find((p) => p.id === placeId)) {
   //   throw new HttpError("Could not find a place for that id.", 404);
   // }
