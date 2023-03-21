@@ -30,7 +30,7 @@ app.use((error, req, res, next) => {
 
 mongoose
   .connect(
-    "mongodb+srv://woldemst:woldemst@firstcluster.dasacxo.mongodb.net/places?retryWrites=true&w=majority"
+    "mongodb+srv://root:uj6eqjfGnAdfVzsV@firstcluster.dasacxo.mongodb.net/places?retryWrites=true&w=majority"
     , {
       useNewUrlParser: true,
       useUnifiedTopology: true
