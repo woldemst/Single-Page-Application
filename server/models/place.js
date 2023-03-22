@@ -12,7 +12,7 @@ const placeSchema = new Schema({
         lng: { type: Number, required: true },
     },
     image: { type: String, required: true },
-    creator: { type: String, required: true }
+    creator: { type: mongoose.Types.ObjectId, required: true, ref: 'User' } // ref: establish connection between two schema 
 });
 
 module.exports = mongoose.model('Place', placeSchema);
