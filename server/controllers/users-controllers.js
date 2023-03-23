@@ -1,5 +1,3 @@
-// const { v4: uuidv4 } = require("uuid");
-
 const { validationResult } = require("express-validator");
 
 const HttpError = require("../models/http-error");
@@ -33,6 +31,7 @@ const signup = async (req, res, next) => {
   let existingUser;
   try {
     existingUser = await User.findOne({ email: email });
+
   } catch (err) {
     const error = new HttpError(
       "Signing up failed, please try again later.",
