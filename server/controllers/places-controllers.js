@@ -1,30 +1,14 @@
 // const { v4: uuidv4 } = require("uuid");
 const { validationResult } = require("express-validator");
+const mongoose = require('mongoose')
 
 const HttpError = require("../models/http-error");
 const getCoordsForAddress = require("../util/location");
 const Place = require("../models/place");
-
-// let DUMMY_PLACES = [
-//   {
-//     id: "p1",
-//     title: "Empire State Building",
-//     description: "One of the most famous sky scrapers in the world!",
-//     location: {
-//       lat: 40.7484474,
-//       lng: -73.9871516,
-//     },
-//     address: "20 W 34th St, New York, NY 10001",
-//     creator: "u1",
-//   },
-// ];
+const User = require("../models/user");
 
 const getPlaceById = async (req, res, next) => {
   const placeId = req.params.pid; // { pid: 'p1' }
-
-  // const place = DUMMY_PLACES.find(p => {
-  //   return p.id === placeId;
-  // });
 
   let place;
   try {
@@ -46,9 +30,6 @@ const getPlaceById = async (req, res, next) => {
     return next(error);
   }
 
-  // development
-  // res.json({ place }); // => { place } => { place: place }
-
   // moved to normal js object
   res.json({ place: place.toObject({ getters: true }) });
 };
@@ -59,10 +40,6 @@ const getPlaceById = async (req, res, next) => {
 // http://localhost:5000/api/places/user/userId
 const getPlacesByUserId = async (req, res, next) => {
   const userId = req.params.uid;
-
-  // const places = DUMMY_PLACES.filter((p) => {
-  //   return p.creator === userId;
-  // });
 
   let places;
 
@@ -117,15 +94,36 @@ const createPlace = async (req, res, next) => {
     address,
     location: coordinates,
     image:
-      'https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Empire_State_Building_%28aerial_view%29.jpg/400px-Empire_State_Building_%28aerial_view%29.jpg',
-    creator
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Empire_State_Building_%28aerial_view%29.jpg/400px-Empire_State_Building_%28aerial_view%29.jpg",
+    creator,
   });
 
+  let user;
   try {
-    await createdPlace.save();
+    user = await User.findById(creator);
   } catch (err) {
     const error = new HttpError(
-      'Creating place failed, please try again.',
+      "Creating place failed, please try again.",
+      500
+    );
+    return next(error);
+  }
+
+  if (!user) {
+    const error = new HttpError("Could not find user for provided id.", 404);
+    return next(error);
+  }
+
+  try {
+    const sess = await mongoose.startSession()
+    sess.startTransaction()
+    await createdPlace.save({session: sess})
+    user.places.push(createdPlace)
+    await user.save({session: sess})
+    await sess.commitTransaction()
+  } catch (err) {
+    const error = new HttpError(
+      "Creating place failed, please try again.",
       500
     );
     return next(error);
@@ -140,8 +138,7 @@ const updatePlace = async (req, res, next) => {
   if (!errors.isEmpty()) {
     return next(
       new HttpError("Invalid inputs passed, please check your data.", 422)
-
-    ) 
+    );
   }
 
   const { title, description } = req.body;
@@ -203,16 +200,14 @@ const deletePlace = async (req, res, next) => {
   try {
     place = await Place.findById(placeId);
     // const place = await Place.findByIdAndDelete(placeId);
-
   } catch (err) {
     const error = new HttpError(
-      'Something went wrong, could not delete place.',
+      "Something went wrong, could not delete place.",
       500
     );
     return next(error);
   }
 
-  
   if (!place) {
     const error = new HttpError("Could not find place for this id.", 404);
     return next(error);
@@ -222,15 +217,14 @@ const deletePlace = async (req, res, next) => {
     await place.deleteOne();
   } catch (err) {
     const error = new HttpError(
-      'Something went wrong, could not delete place.',
+      "Something went wrong, could not delete place.",
       500
     );
     return next(error);
   }
 
-  res.status(200).json({ message: 'Deleted place.' });
+  res.status(200).json({ message: "Deleted place." });
 };
-
 
 exports.getPlaceById = getPlaceById;
 exports.getPlacesByUserId = getPlacesByUserId;
