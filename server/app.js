@@ -10,6 +10,12 @@ const HttpError = require("./models/http-error").default;
 
 app.use(bodyParser.json());
 
+app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Origin', 'Origin, X-Requested-Width, Constent-Type, Accept, Authorization');
+    res.setHeader('Access-Control-Allow-Methods', 'GET', 'POST', 'PATCH', 'DELETE')
+})
+
 app.use("/api/places", placeRoutes);
 
 app.use("/api/users", usersRoutes);
@@ -30,7 +36,7 @@ app.use((error, req, res, next) => {
 
 mongoose
   .connect(
-    "mongodb+srv://root:uj6eqjfGnAdfVzsV@firstcluster.dasacxo.mongodb.net/places?retryWrites=true&w=majority"
+    "mongodb+srv://root:uj6eqjfGnAdfVzsV@firstcluster.dasacxo.mongodb.net/mern?retryWrites=true&w=majority"
     , {
       useNewUrlParser: true,
       useUnifiedTopology: true
