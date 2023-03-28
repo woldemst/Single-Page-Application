@@ -57,6 +57,7 @@ const Auth = () => {
   const authSubmitHandler = async (event) => {
     event.preventDefault();
 
+    // POST Request to backend
     if (isLoginMode) {
     } else {
       try {
