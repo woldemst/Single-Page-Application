@@ -6,9 +6,9 @@ import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
 import { useHttpClient } from "../../shared/hooks/http-hook";
 
 const Users = () => {
+  const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const [loadedUsers, setLoadedUsers] = useState();
 
-  const { isLoading, error, sendRequest, clearError } = useHttpClient();
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -21,17 +21,14 @@ const Users = () => {
       } catch (err) {}
     };
     fetchUsers();
-  }, []);
+  }, [sendRequest]);
 
-  const errorHandler = () => {
-    setError(null);
-  };
   // dependencg array is empty it means that the code is going to be exicuted just once
   // do not use async function in useEffect beacause they return promiss
   // useEffect(async () => {}) BAD CODE !! DO NOT LIKLE THIS !!
   return (
     <>
-      <ErrorModal error={error} onClear={errorHandler} />
+      <ErrorModal error={error} onClear={clearError} />
       {isLoading && (
         <div className="center">
           <LoadingSpinner />
