@@ -60,23 +60,23 @@ const Auth = () => {
     setIsLoginMode((prevMode) => !prevMode);
   };
 
-  const authSubmitHandler = async (event) => {
+  const authSubmitHandler = async event => {
     event.preventDefault();
-
     // POST Request to backend
 
     if (isLoginMode) {
       try {
         // sendRequest(url, method, body, headers)
+
         const responseData = await sendRequest(
-          "http://localhost:5000/api/users/login",
-          "POST",
+          'http://localhost:5000/api/users/login',
+          'POST',
           JSON.stringify({
             email: formState.inputs.email.value,
-            password: formState.inputs.password.value,
+            password: formState.inputs.password.value
           }),
           {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json'
           }
         );
         auth.login(responseData.user.id);
@@ -84,24 +84,23 @@ const Auth = () => {
     } else {
       try {
         // sendRequest(url, method, body, headers)
+
         const responseData = await sendRequest(
-          // url
-          "http://localhost:5000/api/users/signup",
-          // method
-          "POST",
-          // body
+          //url
+          'http://localhost:5000/api/users/signup',
+          //method
+          'POST',
+          //body
           JSON.stringify({
             name: formState.inputs.name.value,
             email: formState.inputs.email.value,
-            password: formState.inputs.password.value,
+            password: formState.inputs.password.value
           }),
-          // header
+          //header
           {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json'
           }
         );
-
-
 
         auth.login(responseData.user.id);
       } catch (err) {}
@@ -109,10 +108,10 @@ const Auth = () => {
   };
 
   return (
-    <>
+    <React.Fragment>
       <ErrorModal error={error} onClear={clearError} />
       <Card className="authentication">
-        {isLoading && <LoadingSpinner isOverlay />}
+        {isLoading && <LoadingSpinner asOverlay />}
         <h2>Login Required</h2>
         <hr />
         <form onSubmit={authSubmitHandler}>
@@ -146,14 +145,14 @@ const Auth = () => {
             onInput={inputHandler}
           />
           <Button type="submit" disabled={!formState.isValid}>
-            {isLoginMode ? "LOGIN" : "SIGNUP"}
+            {isLoginMode ? 'LOGIN' : 'SIGNUP'}
           </Button>
         </form>
         <Button inverse onClick={switchModeHandler}>
-          SWITCH TO {isLoginMode ? "SIGNUP" : "LOGIN"}
+          SWITCH TO {isLoginMode ? 'SIGNUP' : 'LOGIN'}
         </Button>
       </Card>
-    </>
+    </React.Fragment>
   );
 };
 

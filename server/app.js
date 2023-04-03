@@ -5,17 +5,26 @@ const app = express();
 
 const placeRoutes = require("./routes/places-routes");
 const usersRoutes = require("./routes/users-routes");
-const HttpError = require("./models/http-error").default;
+const HttpError = require("./models/http-error");
 // const usersRouters = require("./routes/users-routes");
 
 app.use(bodyParser.json());
 
 app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-    res.setHeader('Access-Control-Allow-Methods', 'GET', 'POST', 'PATCH', 'DELETE')
-    next()
-})
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+  );
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET",
+    "POST",
+    "PATCH",
+    "DELETE"
+  );
+  next();
+});
 
 app.use("/api/places", placeRoutes);
 app.use("/api/users", usersRoutes);
@@ -37,15 +46,11 @@ app.use((error, req, res, next) => {
 mongoose
   .connect(
     "mongodb+srv://root:uj6eqjfGnAdfVzsV@firstcluster.dasacxo.mongodb.net/mern?retryWrites=true&w=majority"
-    , {
-      useNewUrlParser: true,
-      useUnifiedTopology: true
-    }
   )
   .then(() => {
     app.listen(5000);
-    console.log('connected');
+    console.log("connected");
   })
-  .catch(err => {
+  .catch((err) => {
     console.log(err);
   });

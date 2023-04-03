@@ -21,45 +21,47 @@ const NewPlace = () => {
   const [formState, inputHandler] = useForm(
     {
       title: {
-        value: "",
-        isValid: false,
+        value: '',
+        isValid: false
       },
       description: {
-        value: "",
-        isValid: false,
+        value: '',
+        isValid: false
       },
       address: {
-        value: "",
-        isValid: false,
-      },
+        value: '',
+        isValid: false
+      }
     },
     false
   );
 
-  const history = useHistory()
+  const history = useHistory();
 
-  const placeSubmitHandler = async (event) => {
+  const placeSubmitHandler = async event => {
     event.preventDefault();
     // console.log(formState.inputs); // send this to the backend!
+
     try {
       await sendRequest(
-        "http://localhost:5000/api/places",
-        "POST",
+        'http://localhost:5000/api/places',
+        'POST',
         JSON.stringify({
           title: formState.inputs.title.value,
           description: formState.inputs.description.value,
           address: formState.inputs.address.value,
-          creator: auth.userId,
+          creator: auth.userId
         }),
-        { "Content-Type": "application/json" }
+        { 'Content-Type': 'application/json' }
       );
+
       // redirect the user to different page
-      history.push('/')
+      history.push('/');
     } catch (err) {}
   };
 
   return (
-    <>
+    <React.Fragment>
       <ErrorModal error={error} onClear={clearError} />
       <form className="place-form" onSubmit={placeSubmitHandler}>
         {isLoading && <LoadingSpinner asOverlay />}
@@ -92,7 +94,7 @@ const NewPlace = () => {
           ADD PLACE
         </Button>
       </form>
-    </>
+    </React.Fragment>
   );
 };
 

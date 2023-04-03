@@ -205,7 +205,6 @@ const deletePlace = async (req, res, next) => {
   }
 
   try {
-    console.log("hier");
     const sess = await mongoose.startSession();
     sess.startTransaction();
 

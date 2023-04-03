@@ -14,7 +14,7 @@ const Users = () => {
     const fetchUsers = async () => {
       try {
         const responseData = await sendRequest(
-          "http://localhost:5000/api/users"
+          'http://localhost:5000/api/users'
         );
 
         setLoadedUsers(responseData.users);
@@ -27,7 +27,7 @@ const Users = () => {
   // do not use async function in useEffect beacause they return promiss
   // useEffect(async () => {}) BAD CODE !! DO NOT LIKLE THIS !!
   return (
-    <>
+    <React.Fragment>
       <ErrorModal error={error} onClear={clearError} />
       {isLoading && (
         <div className="center">
@@ -35,7 +35,7 @@ const Users = () => {
         </div>
       )}
       {!isLoading && loadedUsers && <UsersList items={loadedUsers} />}
-    </>
+    </React.Fragment>
   );
 };
 
