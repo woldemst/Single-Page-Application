@@ -16,7 +16,7 @@ const getPlaceById = async (req, res, next) => {
     place = await Place.findById(placeId);
   } catch (err) {
     const error = new HttpError(
-      'Something went wrong, could not find a place.',
+      "Something went wrong, could not find a place.",
       500
     );
     return next(error);
@@ -24,7 +24,7 @@ const getPlaceById = async (req, res, next) => {
 
   if (!place) {
     const error = new HttpError(
-      'Could not find a place for the provided id.',
+      "Could not find a place for the provided id.",
       404
     );
     return next(error);
@@ -41,10 +41,10 @@ const getPlacesByUserId = async (req, res, next) => {
   // let places;
   let userWithPlaces;
   try {
-    userWithPlaces = await User.findById(userId).populate('places');
+    userWithPlaces = await User.findById(userId).populate("places");
   } catch (err) {
     const error = new HttpError(
-      'Fetching places failed, please try again later',
+      "Fetching places failed, please try again later",
       500
     );
     return next(error);
@@ -53,17 +53,17 @@ const getPlacesByUserId = async (req, res, next) => {
   // if (!places || places.length === 0) {
   if (!userWithPlaces || userWithPlaces.places.length === 0) {
     return next(
-      new HttpError('Could not find places for the provided user id.', 404)
+      new HttpError("Could not find places for the provided user id.", 404)
     );
   }
 
   // .find() returns an array and we can't use .toObject() method
   //that why we use a .map() method atfirst
-  
+
   res.json({
-    places: userWithPlaces.places.map(place =>
+    places: userWithPlaces.places.map((place) =>
       place.toObject({ getters: true })
-    )
+    ),
   });
 };
 
@@ -168,7 +168,7 @@ const updatePlace = async (req, res, next) => {
 
   //used for mongodb
   try {
-    place.save(); // mongoose method
+    await place.save(); // mongoose method
   } catch (err) {
     const error = new HttpError(
       "Something went wrong, could not update place.",
