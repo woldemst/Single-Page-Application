@@ -8,6 +8,8 @@ const usersRoutes = require("./routes/users-routes");
 const HttpError = require("./models/http-error");
 // const usersRouters = require("./routes/users-routes");
 
+mongoose.set('strictQuery', false);
+
 app.use(bodyParser.json());
 
 app.use((req, res, next) => {

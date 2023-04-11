@@ -69,7 +69,7 @@ const Auth = () => {
   const authSubmitHandler = async event => {
     event.preventDefault();
 
-    console.log(formState.inputs);
+    // console.log(formState.inputs);
     // POST Request to backend
 
     if (isLoginMode) {
@@ -91,23 +91,19 @@ const Auth = () => {
       } catch (err) {}
     } else {
       try {
-        // sendRequest(url, method, body, headers)
 
+        const formData = new FormData()
+        formData.append('name', formState.inputs.name.value);
+        formData.append('email', formState.inputs.email.value);
+        formData.append('password', formState.inputs.password.value);
+        formData.append('image', formState.inputs.image.value)
+        // sendRequest(url, method, body, headers)
         const responseData = await sendRequest(
           //url
           'http://localhost:5000/api/users/signup',
           //method
           'POST',
-          //body
-          JSON.stringify({
-            name: formState.inputs.name.value,
-            email: formState.inputs.email.value,
-            password: formState.inputs.password.value
-          }),
-          //header
-          {
-            'Content-Type': 'application/json'
-          }
+          formData
         );
 
         auth.login(responseData.user.id);
