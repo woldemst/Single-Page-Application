@@ -10,9 +10,9 @@ const MIME_TYPE_MAP = {
 
 // this variable is a group of middlewares
 const fileUpload = multer({
-    limits: 500000,
+    limits: 800000,
     storage: multer.diskStorage({
-        destination: (req, file, cb)=>{
+        destination: (req, file, cb) => {
             cb(null, 'uploads/images')
         },
         filename: (req, file, cb) => {
@@ -24,7 +24,7 @@ const fileUpload = multer({
         const isValid = !!MIME_TYPE_MAP[file.mimetype]
         let error = isValid ? null : new Error('Invalid mime type!')
         cb(error, isValid)
-    }     
+    }
 });
 
 module.exports = fileUpload;

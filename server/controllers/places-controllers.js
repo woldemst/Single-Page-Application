@@ -34,7 +34,7 @@ const getPlaceById = async (req, res, next) => {
   res.json({ place: place.toObject({ getters: true }) });
 };
 
-// http://localhost:5000/api/places/user/userId
+// http://localhost:8000/api/places/user/userId
 const getPlacesByUserId = async (req, res, next) => {
   const userId = req.params.uid;
 

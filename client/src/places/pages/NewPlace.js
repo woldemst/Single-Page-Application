@@ -44,7 +44,7 @@ const NewPlace = () => {
 
     try {
       await sendRequest(
-        'http://localhost:5000/api/places',
+        'http://localhost:8000/api/places',
         'POST',
         JSON.stringify({
           title: formState.inputs.title.value,
@@ -57,7 +57,7 @@ const NewPlace = () => {
 
       // redirect the user to different page
       history.push('/');
-    } catch (err) {}
+    } catch (err) { }
   };
 
   return (

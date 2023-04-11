@@ -56,7 +56,7 @@ const Auth = () => {
             isValid: false,
           },
           image: {
-            value:  null, 
+            value: null,
             isValid: false
           }
         },
@@ -77,7 +77,7 @@ const Auth = () => {
         // sendRequest(url, method, body, headers)
 
         const responseData = await sendRequest(
-          'http://localhost:5000/api/users/login',
+          'http://localhost:8000/api/users/login',
           'POST',
           JSON.stringify({
             email: formState.inputs.email.value,
@@ -88,7 +88,7 @@ const Auth = () => {
           }
         );
         auth.login(responseData.user.id);
-      } catch (err) {}
+      } catch (err) { }
     } else {
       try {
 
@@ -100,14 +100,14 @@ const Auth = () => {
         // sendRequest(url, method, body, headers)
         const responseData = await sendRequest(
           //url
-          'http://localhost:5000/api/users/signup',
+          'http://localhost:8000/api/users/signup',
           //method
           'POST',
           formData
         );
 
         auth.login(responseData.user.id);
-      } catch (err) {}
+      } catch (err) { }
     }
   };
 
@@ -130,7 +130,7 @@ const Auth = () => {
               onInput={inputHandler}
             />
           )}
-          {!isLoginMode && <ImageUpload center id='image' onInput={inputHandler} /> }
+          {!isLoginMode && <ImageUpload center id='image' onInput={inputHandler} />}
           <Input
             element="input"
             id="email"
