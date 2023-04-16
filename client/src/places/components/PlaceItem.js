@@ -1,16 +1,16 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext } from 'react';
 
-import Card from "../../shared/components/UIElements/Card";
-import Button from "../../shared/components/FormElements/Button";
-import Modal from "../../shared/components/UIElements/Modal";
-import Map from "../../shared/components/UIElements/Map";
-import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
-import ErrorModal from "../../shared/components/UIElements/ErrorModal";
-import { AuthContext } from "../../shared/context/auth-context";
-import { useHttpClient } from "../../shared/hooks/http-hook";
-import "./PlaceItem.css";
+import Card from '../../shared/components/UIElements/Card';
+import Button from '../../shared/components/FormElements/Button';
+import Modal from '../../shared/components/UIElements/Modal';
+import Map from '../../shared/components/UIElements/Map';
+import ErrorModal from '../../shared/components/UIElements/ErrorModal';
+import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
+import { AuthContext } from '../../shared/context/auth-context';
+import { useHttpClient } from '../../shared/hooks/http-hook';
+import './PlaceItem.css';
 
-const PlaceItem = (props) => {
+const PlaceItem = props => {
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const auth = useContext(AuthContext);
   const [showMap, setShowMap] = useState(false);
@@ -33,12 +33,10 @@ const PlaceItem = (props) => {
     try {
       await sendRequest(
         `http://localhost:8000/api/places/${props.id}`,
-        "DELETE"
+        'DELETE'
       );
-      props.onDelete(props.id)
-    } catch (err) {
-      console.log(err);
-    }
+      props.onDelete(props.id);
+    } catch (err) { }
   };
 
   return (
@@ -56,7 +54,6 @@ const PlaceItem = (props) => {
           <Map center={props.coordinates} zoom={16} />
         </div>
       </Modal>
-
       <Modal
         show={showConfirmModal}
         onCancel={cancelDeleteHandler}
@@ -94,12 +91,13 @@ const PlaceItem = (props) => {
               VIEW ON MAP
             </Button>
             {auth.userId === props.creatorId && (
-              <>
-                <Button to={`/places/${props.id}`}>EDIT</Button>
-                <Button danger onClick={showDeleteWarningHandler}>
-                  DELETE
-                </Button>
-              </>
+              <Button to={`/places/${props.id}`}>EDIT</Button>
+            )}
+
+            {auth.userId === props.creatorId && (
+              <Button danger onClick={showDeleteWarningHandler}>
+                DELETE
+              </Button>
             )}
           </div>
         </Card>

@@ -71,7 +71,7 @@ const createPlace = async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return next(
-      new HttpError("Invalid inputs passed, please check your data.", 422)
+      new HttpError('Invalid inputs passed, please check your data.', 422)
     );
   }
 
@@ -84,14 +84,13 @@ const createPlace = async (req, res, next) => {
     return next(error);
   }
 
-  // const title = req.body.title;
   const createdPlace = new Place({
     title,
     description,
     address,
     location: coordinates,
     image: req.file.path,
-    creator,
+    creator
   });
 
   let user;
@@ -99,16 +98,18 @@ const createPlace = async (req, res, next) => {
     user = await User.findById(creator);
   } catch (err) {
     const error = new HttpError(
-      "Creating place failed, please try again.",
+      'Creating place failed, please try again.',
       500
     );
     return next(error);
   }
 
   if (!user) {
-    const error = new HttpError("Could not find user for provided id.", 404);
+    const error = new HttpError('Could not find user for provided id.', 404);
     return next(error);
   }
+
+  console.log(user);
 
   try {
     const sess = await mongoose.startSession();
@@ -119,13 +120,12 @@ const createPlace = async (req, res, next) => {
     await sess.commitTransaction();
   } catch (err) {
     const error = new HttpError(
-      "Creating place failed, please try again.",
+      'Creating place failed, please try again.',
       500
     );
     return next(error);
   }
 
-  //  createdPlace.save();
   res.status(201).json({ place: createdPlace });
 };
 
