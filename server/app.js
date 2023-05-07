@@ -48,9 +48,11 @@ app.use((error, req, res, next) => {
   res.json({ message: error.message || "An unknown error occurred!" });
 });
 
-mongoose
+
+  mongoose
   .connect(
-    "mongodb+srv://root:uj6eqjfGnAdfVzsV@firstcluster.dasacxo.mongodb.net/mern?retryWrites=true&w=majority"
+    "mongodb+srv://root:uj6eqjfGnAdfVzsV@firstcluster.dasacxo.mongodb.net/mern?retryWrites=true&w=majority",
+    { useNewUrlParser: true, useUnifiedTopology: true, writeConcern: { w: "majority" } }
   )
   .then(() => {
     app.listen(8000);
