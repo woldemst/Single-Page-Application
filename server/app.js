@@ -51,7 +51,7 @@ app.use((error, req, res, next) => {
 
 mongoose
   .connect(
-    "mongodb+srv://root:uj6eqjfGnAdfVzsV@firstcluster.dasacxo.mongodb.net/mern?retryWrites=true&w=majority"
+    "mongodb+srv://admin:1234@spaccluster.8zkky.mongodb.net/?retryWrites=true&w=majority&appName=SPACCluster"
   )
   .then(() => {
     app.listen(8000);
