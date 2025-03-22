@@ -3,7 +3,7 @@ import {
   BrowserRouter as Router,
   Route,
   Navigate,
-  Routes
+  Routes,
 } from "react-router-dom";
 
 import Users from "./user/pages/Users";
@@ -18,38 +18,40 @@ const App = () => {
   const [token, setToken] = useState(false);
   const [userId, setUserId] = useState(false);
 
-  const login = useCallback((uid, token) => {
+  const login = useCallback((uid, token, expiration) => {
+    const expirationDate = expiration || new Date(new Date().getTime() + 1000 * 60 * 60);
+
     setToken(token);
     setUserId(uid);
     localStorage.setItem(
       "userData",
-      JSON.stringify({ userId: uid, token: token })
+      JSON.stringify({ userId: uid, token: token, expiration: expirationDate.toISOString() })
     );
   }, []);
 
   const logout = useCallback(() => {
     setToken(null);
     setUserId(null);
-    localStorage.removeItem('userData')
+    localStorage.removeItem("userData");
   }, []);
 
   useEffect(() => {
-    const storedData = JSON.parse(localStorage.getItem('userData'))
-    if (storedData && storedData.token) {
-      login(storedData.userId, storedData.token)
+    const storedData = JSON.parse(localStorage.getItem("userData"));
+    if (storedData && storedData.token && new Date(storedData.expiration) > new Date()) {
+      login(storedData.userId, storedData.token, new Date(storedData.expiration ));
     }
-  }, [login])
+  }, [login]);
 
   let routes;
 
   if (token) {
     routes = (
       <Routes>
-       <Route path="/" element={<Users />} />
-       <Route path="/:userId/places" element={<UserPlaces />} />
-       <Route path="/places/new" element={<NewPlace />} />
-       <Route path="/places/:placeId" element={<UpdatePlace />} />
-       <Route path="*" element={<Navigate to="/" />} />
+        <Route path="/" element={<Users />} />
+        <Route path="/:userId/places" element={<UserPlaces />} />
+        <Route path="/places/new" element={<NewPlace />} />
+        <Route path="/places/:placeId" element={<UpdatePlace />} />
+        <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     );
   } else {
@@ -60,7 +62,7 @@ const App = () => {
         <Route path="/auth" element={<Auth />} />
         <Route path="*" element={<Navigate to="/auth" />} />
       </Routes>
-    )
+    );
   }
 
   return (
