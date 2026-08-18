@@ -1,6 +1,6 @@
 # SAP-MERN
 
-Earlier fullstack JavaScript project with a React frontend and Node.js / Express backend.
+Earlier fullstack JavaScript learning project with a React frontend and Node.js / Express backend.
 
 The project focuses on CRUD functionality, user-related workflows and the connection between frontend, backend and database. It is kept as part of my development history and shows my earlier work with MERN-style application architecture.
 
